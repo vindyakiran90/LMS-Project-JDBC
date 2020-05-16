@@ -40,4 +40,9 @@ public class StudentServiceImplementation implements StudentService {
 	public List<BookBean> getBooksInfo() {
 		return dao.getBooksInfo();
 	}
+
+	@Override
+	public boolean bookReturn(int userId, int bookId) {
+		return dao.bookReturn(userId, bookId);
+	}
 }

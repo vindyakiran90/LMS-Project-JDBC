@@ -12,4 +12,5 @@ public interface StudentDAO {
 	BookBean searchBookByTitle(String bookTitle);
 	BookBean searchBookByAuthor(String author);
 	List<BookBean> getBooksInfo();
+	boolean bookReturn(int userId, int bookId);
 }

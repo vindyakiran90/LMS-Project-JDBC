@@ -1,10 +1,13 @@
 package com.tyss.lmsjdbc.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -119,7 +122,7 @@ public class StudentDAOImplementation implements StudentDAO {
 				throw new LMSException("User does not exist");
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			return false;
 		}
 		return false;
 	}
@@ -144,8 +147,6 @@ public class StudentDAOImplementation implements StudentDAO {
 			}
 			return beans;
 		} catch(Exception e) {
-			e.printStackTrace();
-			System.out.println("4");
 			return null;
 		}
 	}
@@ -173,7 +174,6 @@ public class StudentDAOImplementation implements StudentDAO {
 				return null;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			return null;
 		} 
 	}
@@ -201,7 +201,6 @@ public class StudentDAOImplementation implements StudentDAO {
 				return null;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			return null;
 		} 
 	}
@@ -231,7 +230,6 @@ public class StudentDAOImplementation implements StudentDAO {
 				return null;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			return null;
 		} 
 	}
@@ -256,9 +254,84 @@ public class StudentDAOImplementation implements StudentDAO {
 			}
 			return beans;
 		} catch(Exception e) {
-			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	@Override
+	public boolean bookReturn(int userId, int bookId) {
+		try(PreparedStatement pstmt = connection.prepareStatement(QueryMapper.borrowBook)){ 
+			pstmt.setInt(1, userId);
+			pstmt.setInt(2, bookId);
+
+			ResultSet resultSet= pstmt.executeQuery();
+
+			if(resultSet.next()) {
+				Date returnDate = resultSet.getDate("dateOfReturn");
+
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				Calendar calendar =  Calendar.getInstance();
+				String date = sdf.format(calendar.getTime());
+				Date currentDate = java.sql.Date.valueOf(date);
+
+				long noOfDaysBetween = currentDate.getTime() - returnDate.getTime();
+				float daysBetween = (noOfDaysBetween / (1000 * 60 * 60 * 24));
+
+				if(daysBetween > 0) {
+					try(PreparedStatement pstmt1 = connection.prepareStatement(QueryMapper.updateFees)){ 
+						pstmt1.setDouble(1, daysBetween * 5.0);
+						pstmt1.setInt(2, userId);
+						pstmt1.setInt(3, bookId);
+						int count = pstmt1.executeUpdate();
+						if(count != 0) {
+							System.out.println("Student should pay "+ daysBetween * 5 +" Rupees");
+						}
+					} catch(Exception e) {
+						throw new LMSException("Student should pay the fine for delaying to return the book");
+					}
+				} else {
+					try(PreparedStatement pstmt1 = connection.prepareStatement(QueryMapper.deleteBorrowBook)){ 
+						pstmt1.setInt(1, userId);
+						pstmt1.setInt(2, bookId);
+						int count = pstmt1.executeUpdate();
+						System.out.println("count "+count);
+						if(count != 0) {
+
+							try(PreparedStatement pstmt2 = connection.prepareStatement(QueryMapper.deleteIssueBook)){ 
+								pstmt2.setInt(1, userId);
+								pstmt2.setInt(2, bookId);
+								int count1 = pstmt2.executeUpdate();
+								System.out.println("count1 "+count1);
+								if(count1 == 0) {
+
+									try(PreparedStatement pstmt3 = connection.prepareStatement(QueryMapper.searchBookByIdQuery)){ 
+										pstmt3.setInt(1, bookId);
+										ResultSet resultSet3 = pstmt3.executeQuery();
+										if(resultSet3.next()) {
+											try(PreparedStatement pstmt4 = connection.prepareStatement(QueryMapper.updateBookBean)){ 
+												pstmt4.setInt(1, (resultSet3.getInt("numberOfAvailableBooks") + 1));
+												pstmt4.setInt(2, (resultSet3.getInt("numberOfIssuedBooks") - 1));
+												pstmt4.setInt(3, bookId);
+												int count4 = pstmt4.executeUpdate();
+												if(count4 != 0) {
+													return true;
+												}
+											}
+										}
+									}
+								}
+							} catch(Exception e) {
+								return false;
+							}
+						}
+
+					}
+				}
+			}
+		} catch (SQLException e) {
+			return false;
+		}
+		return false;
 	}
 
 }

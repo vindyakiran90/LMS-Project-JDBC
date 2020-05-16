@@ -54,7 +54,7 @@ public class AdminLogin {
 										+ "6:Book List \n"
 										+ "7:Student List \n"
 										+ "8:Show Requests \n"
-										+ "9:Book Return \n"
+										+ "9:Is Book received \n"
 										+ "10:Issued Books List \n"
 										+ "11:Go back to the Main");
 								int choice1 = scanner.nextInt();
@@ -472,37 +472,37 @@ public class AdminLogin {
 											+ "---------------------------------------------------------------------------------------------");
 									break;
 								case 9:
-									int user_Id = 0;
-									do { 
-										try { 
-											System.out.println("Enter User Id");
-											user_Id = scanner.nextInt();
-											if(validation.validateId(user_Id)) { 
-												flag = true; 
-											} 
-										} catch	(InputMismatchException e) { 
-											flag = false;
-											scanner.nextLine();
-											System.err.println("Invalid User Id"); 
-										} catch (ValidationException e) { 
-											flag = false; 
-											scanner.nextLine();
-											System.err.println(e.getMessage()); 
-										} 
-									}while(!flag);
-
-									int book_Id = 0;									
+									int user_Id3 = 0;
 									do {
 										try {
-											System.out.println("Enter Book Id");
-											book_Id = scanner.nextInt();
-											if(validation.validateBookId(book_Id)) {
+											System.out.println("Enter the Student User Id");
+											user_Id3 = scanner.nextInt();
+											if(validation.validateId(user_Id3)) {
 												flag = true;
 											}
 										} catch (InputMismatchException e) {
 											flag = false;
 											scanner.nextLine();
-											System.err.println("Invalid Book Id");
+											System.err.println("Invalid User Id");
+										} catch (ValidationException e) {
+											flag = false;
+											scanner.nextLine();
+											System.err.println(e.getMessage());
+										}
+									}while(!flag);
+									
+									int book_Id3 = 0;
+									do {
+										try {
+											System.out.println("Enter the Book Id");
+											book_Id3 = scanner.nextInt();
+											if(validation.validateBookId(book_Id3)) {
+												flag = true;
+											}
+										} catch (InputMismatchException e) {
+											flag = false;
+											scanner.nextLine();
+											System.err.println("Enter the book Id as digits");
 										} catch (ValidationException e) {
 											flag = false;
 											scanner.nextLine();
@@ -510,18 +510,18 @@ public class AdminLogin {
 										}
 									}while(!flag);
 
-									boolean status = adminService.bookReturn(user_Id, book_Id);
+									boolean check1 = adminService.isBookReceived(user_Id3, book_Id3);
+
 									System.out.println("----------------------------------------------------------------------------------------"
 											+ "---------------------------------------------------------------------------------------------");
-									if(status) {
-										System.out.println("Book returned successfully");
+									if(check1) {
+										System.out.println("Book received successfully");
 									} else {
-										System.out.println("Unable to return the book");
+										System.out.println("Book is not received");
 									}
 									System.out.println("----------------------------------------------------------------------------------------"
 											+ "---------------------------------------------------------------------------------------------");
 									break;
-
 								case 10:
 									List<IssueBook> issueBook = adminService.issuedBooks();
 									System.out.println("----------------------------------------------------------------------------------------"

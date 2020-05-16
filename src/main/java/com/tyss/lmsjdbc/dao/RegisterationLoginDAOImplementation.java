@@ -39,14 +39,13 @@ public class RegisterationLoginDAOImplementation implements RegisterationLoginDA
 				return null;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			return null;
 		} finally {
 			if(resultSet != null) {
 				try {
 					resultSet.close();
 				} catch (SQLException e) {
-					e.printStackTrace();
+					throw new LMSException("Unable to close the resultset object");
 				}
 			}
 		}

@@ -27,7 +27,6 @@ public class StudentLogin {
 	StudentService studentService = StudentFactory.getStudentService();
 
 	public void login() {
-
 		try(Scanner scanner = new Scanner(System.in);
 				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in))){
 			do {
@@ -47,7 +46,8 @@ public class StudentLogin {
 										+ "2:Book List \n"
 										+ "3:Book Request\n"
 										+ "4:Books Borrowed\n"
-										+ "5:Go back to the Main");
+										+ "5:Book Return \n"
+										+ "6:Go back to the Main");
 								int ch = scanner.nextInt();
 								switch(ch) {
 								case 1:
@@ -266,13 +266,66 @@ public class StudentLogin {
 									System.out.println("----------------------------------------------------------------------------------------"
 											+ "---------------------------------------------------------------------------------------------");
 									break;
-
 								case 5:
+									int user_Id2 = 0;
+									do { 
+										try { 
+											System.out.println("Enter User Id");
+											user_Id2 = scanner.nextInt();
+											if(validation.validateId(user_Id2)) { 
+												flag = true; 
+											} 
+										} catch	(InputMismatchException e) { 
+											flag = false;
+											scanner.nextLine();
+											System.err.println("Invalid User Id"); 
+										} catch (ValidationException e) { 
+											flag = false; 
+											scanner.nextLine();
+											System.err.println(e.getMessage()); 
+										} 
+									}while(!flag);
+
+									int book_Id2 = 0;									
+									do {
+										try {
+											System.out.println("Enter Book Id");
+											book_Id2 = scanner.nextInt();
+											if(validation.validateBookId(book_Id2)) {
+												flag = true;
+											}
+										} catch (InputMismatchException e) {
+											flag = false;
+											scanner.nextLine();
+											System.err.println("Invalid Book Id");
+										} catch (ValidationException e) {
+											flag = false;
+											scanner.nextLine();
+											System.err.println(e.getMessage());
+										}
+									}while(!flag);
+
+									boolean status = studentService.bookReturn(user_Id2, book_Id2);
+									System.out.println("----------------------------------------------------------------------------------------"
+											+ "---------------------------------------------------------------------------------------------");
+									if(status) {
+										System.out.println("Book returned successfully");
+									} else {
+										System.out.println("Unable to return the book");
+									}
+									System.out.println("----------------------------------------------------------------------------------------"
+											+ "---------------------------------------------------------------------------------------------");
+									break;
+
+								case 6:
 									System.out.println("----------------------------------------------------------------------------------------"
 											+ "---------------------------------------------------------------------------------------------");
 									String args[] = {"Welcome to Main Controller"}; 
 									MainController.main(args);
-
+									break;
+								default:
+									System.out.println("Invalid entry");
+									flag = false;
 								}
 							}//While loop
 						} else {

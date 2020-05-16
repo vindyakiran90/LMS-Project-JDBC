@@ -55,4 +55,12 @@ public class StudentDAOTest {
 		List<BookBean> bookBean = dao.getBooksInfo();
 		Assertions.assertNotNull(bookBean);
 	}
+	
+	@Test
+	public void testBookReturn() {
+		int userId = 10002;
+		int bookId = 2001;
+		boolean status = dao.bookReturn(userId, bookId);
+		Assertions.assertTrue(status);
+	}
 }

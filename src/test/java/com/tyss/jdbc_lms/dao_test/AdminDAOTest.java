@@ -81,10 +81,10 @@ public class AdminDAOTest {
 	}
 	
 	@Test
-	public void testBookReturn() {
-		int userId = 10009;
-		int bookId = 1001;
-		boolean status = dao.bookReturn(userId, bookId);
+	public void testIsBookReceived() {
+		int userId = 10002;
+		int bookId = 1000;
+		boolean status = dao.isBookReceived(userId, bookId);
 		Assertions.assertTrue(status);
 	}
 }
