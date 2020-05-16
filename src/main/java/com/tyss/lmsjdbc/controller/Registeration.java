@@ -9,6 +9,7 @@ import java.util.Scanner;
 import javax.xml.bind.ValidationException;
 
 import com.tyss.lmsjdbc.dto.UserBean;
+import com.tyss.lmsjdbc.exception.LMSException;
 import com.tyss.lmsjdbc.factory.RegisterationLoginFactory;
 import com.tyss.lmsjdbc.service.RegisterationLoginService;
 import com.tyss.lmsjdbc.validation.Validation;
@@ -20,8 +21,7 @@ public class Registeration {
 
 	public void register() {
 
-		try(Scanner scanner = new Scanner(System.in);
-				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in))){
+		try(Scanner scanner = new Scanner(System.in);BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in))){
 			boolean flag = false;
 			System.out.println("Welcome to Registration");
 			UserBean bean1 = new UserBean();
@@ -32,14 +32,16 @@ public class Registeration {
 					if(validation.validateFirstName(regFirstName)) {
 						bean1.setFirstName(regFirstName);
 						flag = true;
-					}
+					} 
 				} catch (InputMismatchException e) {
 					flag = false;
+					scanner.nextLine();
 					System.err.println("Invalid first name");
 				} catch (ValidationException e) {
 					flag = false;
+					scanner.nextLine();
 					System.err.println(e.getMessage());
-				}
+				}   
 			}while(!flag);
 
 			do {
@@ -52,23 +54,15 @@ public class Registeration {
 					}
 				} catch (InputMismatchException e) {
 					flag = false;
+					scanner.nextLine();
 					System.err.println("Invalid last name");
 				} catch (ValidationException e) {
 					flag = false;
+					scanner.nextLine();
 					System.err.println(e.getMessage());
 				}
 			}while(!flag);
 
-			/*
-			 * do { try { System.out.println("Enter User Id"); int userId =
-			 * scanner.nextInt(); if(validation.validateId(userId)) {
-			 * bean1.setUserId(userId); flag = true; } } catch (InputMismatchException e) {
-			 * flag = false; System.err.println("Invalid User Id"); } catch
-			 * (ValidationException e) { flag = false; System.err.println(e.getMessage()); }
-			 * }while(!flag);
-			 */
-			
-			
 			do {
 				try {
 					System.out.println("Enter Role");
@@ -79,9 +73,11 @@ public class Registeration {
 					}
 				} catch (InputMismatchException e) {
 					flag = false;
+					scanner.nextLine();
 					System.err.println("Invalid Role");
 				} catch (ValidationException e) {
 					flag = false;
+					scanner.nextLine();
 					System.err.println(e.getMessage());
 				}
 			}while(!flag);
@@ -96,9 +92,11 @@ public class Registeration {
 					}
 				} catch (InputMismatchException e) {
 					flag = false;
+					scanner.nextLine();
 					System.err.println("Invalid Phone number");
 				} catch (ValidationException e) {
 					flag = false;
+					scanner.nextLine();
 					System.err.println(e.getMessage());
 				}
 			}while(!flag);
@@ -113,9 +111,11 @@ public class Registeration {
 					}
 				} catch (InputMismatchException e) {
 					flag = false;
+					scanner.nextLine();
 					System.err.println("Invalid Email Id");
 				} catch (ValidationException e) {
 					flag = false;
+					scanner.nextLine();
 					System.err.println(e.getMessage());
 				}
 			}while(!flag);
@@ -129,10 +129,12 @@ public class Registeration {
 						flag = true;
 					}
 				} catch (InputMismatchException e) {
+					scanner.nextLine();
 					flag = false;
 					System.err.println("Invalid password");
 				} catch (ValidationException e) {
 					flag = false;
+					scanner.nextLine();
 					System.err.println(e.getMessage());
 				}
 			}while(!flag);
@@ -143,9 +145,12 @@ public class Registeration {
 			} else {
 				System.out.println("Email already exist");
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
+			String args[] = {"Welcome to Main Controller"}; 
+			MainController.main(args);	
+
+		} catch (IOException e) {
+			throw new LMSException("Invalid registeration");
+		}
 	}
 }

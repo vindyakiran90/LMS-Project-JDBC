@@ -57,4 +57,6 @@ public interface QueryMapper {
 	String deleteBorrowBook = "delete from borrowBook where userId = ? and bookId = ?;";
 
 	String searchBook = "select * from bookBean where bookTitle = ? and author = ?;";
+	
+	String issueBook = "select * from issueBook;";
 }

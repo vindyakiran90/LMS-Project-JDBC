@@ -1,13 +1,14 @@
 package com.tyss.lmsjdbc.controller;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import com.tyss.lmsjdbc.exception.LMSException;
 
 public class MainController {
 
 	public static void main(String[] args) {
-		try(Scanner scanner = new Scanner(System.in)){
-			while(true) {
+		while(true) {
+			try(Scanner scanner = new Scanner(System.in)){
 				System.out.println("----------------------------------------------------------------------------------------"
 						+ "---------------------------------------------------------------------------------------------");
 				System.out.println("                                                                        Welcome to Library Management System");
@@ -15,11 +16,9 @@ public class MainController {
 						+ "---------------------------------------------------------------------------------------------");
 				System.out.println("Enter your choice \n1:Student Login    2:Admin Login   3:Registeration");
 				int choice = 0;
-				if(scanner.hasNextInt()) {
+				if(scanner.hasNext()) {
 					choice = scanner.nextInt();
-				} else {
-					choice = 0;
-				}
+				} 
 				switch(choice) {
 				case 1:
 					StudentLogin studentLogin = new StudentLogin();
@@ -34,11 +33,12 @@ public class MainController {
 					registeration.register();
 					break;
 				default:
-					System.out.println("Invalid entry");
+					System.out.println("Invalid Input");
+					System.exit(0);
 				}
+			}catch(Exception e) {
+				throw new LMSException("Invalid entry");
 			}
-		}catch(InputMismatchException e) {
-			e.printStackTrace();
 		}
 	}
 }

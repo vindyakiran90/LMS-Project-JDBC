@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import com.tyss.lmsjdbc.dao.AdminDAO;
 import com.tyss.lmsjdbc.dao.AdminDAOImplementation;
 import com.tyss.lmsjdbc.dto.BookBean;
+import com.tyss.lmsjdbc.dto.IssueBook;
 import com.tyss.lmsjdbc.dto.RequestBook;
 import com.tyss.lmsjdbc.dto.UserBean;
 
@@ -73,6 +74,12 @@ public class AdminDAOTest {
 		Assertions.assertNotNull(requestBooks);
 	}
 
+	@Test
+	public void testIssuedBooks() {
+		List<IssueBook> issuedBooks = dao.issuedBooks();
+		Assertions.assertNotNull(issuedBooks);
+	}
+	
 	@Test
 	public void testBookReturn() {
 		int userId = 10009;

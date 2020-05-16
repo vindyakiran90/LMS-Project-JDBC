@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.tyss.lmsjdbc.dao.AdminDAO;
 import com.tyss.lmsjdbc.dto.BookBean;
+import com.tyss.lmsjdbc.dto.IssueBook;
 import com.tyss.lmsjdbc.dto.RequestBook;
 import com.tyss.lmsjdbc.dto.UserBean;
 import com.tyss.lmsjdbc.factory.AdminFactory;
@@ -45,5 +46,10 @@ public class AdminServiceImplementation implements AdminService {
 	@Override
 	public boolean bookReturn(int userId, int bookId) {
 		return dao.bookReturn(userId, bookId);
+	}
+
+	@Override
+	public List<IssueBook> issuedBooks() {
+		return dao.issuedBooks();
 	}
 }

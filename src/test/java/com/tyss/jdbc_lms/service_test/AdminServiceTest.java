@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import com.tyss.lmsjdbc.dto.BookBean;
+import com.tyss.lmsjdbc.dto.IssueBook;
 import com.tyss.lmsjdbc.dto.RequestBook;
 import com.tyss.lmsjdbc.dto.UserBean;
 import com.tyss.lmsjdbc.service.AdminService;
@@ -73,6 +74,12 @@ public class AdminServiceTest {
 		Assertions.assertNotNull(requestBooks);
 	}
 
+	@Test
+	public void testIssuedBooks() {
+		List<IssueBook> issuedBooks = adminService.issuedBooks();
+		Assertions.assertNotNull(issuedBooks);
+	}
+	
 	@Test
 	public void testBookReturn() {
 		int userId = 10008;

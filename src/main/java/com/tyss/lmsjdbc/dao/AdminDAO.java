@@ -3,6 +3,7 @@ package com.tyss.lmsjdbc.dao;
 import java.util.List;
 
 import com.tyss.lmsjdbc.dto.BookBean;
+import com.tyss.lmsjdbc.dto.IssueBook;
 import com.tyss.lmsjdbc.dto.RequestBook;
 import com.tyss.lmsjdbc.dto.UserBean;
 
@@ -14,4 +15,5 @@ public interface AdminDAO {
 	List<RequestBook> showRequest();
 	List<UserBean> showStudentUsers();
 	boolean bookReturn(int userId, int bookId);
+	List<IssueBook> issuedBooks();
 }

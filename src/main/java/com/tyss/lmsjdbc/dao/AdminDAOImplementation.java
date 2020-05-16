@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.tyss.lmsjdbc.dto.BookBean;
+import com.tyss.lmsjdbc.dto.IssueBook;
 import com.tyss.lmsjdbc.dto.RequestBook;
 import com.tyss.lmsjdbc.dto.UserBean;
 import com.tyss.lmsjdbc.exception.LMSException;
@@ -367,6 +368,28 @@ public class AdminDAOImplementation implements AdminDAO {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	@Override
+	public List<IssueBook> issuedBooks() {
+		try(Statement stmt = connection.createStatement()){
+			try(ResultSet resultSet = stmt.executeQuery(QueryMapper.issueBook)){
+				List<IssueBook> beans = new LinkedList<IssueBook>();
+				while(resultSet.next()) {
+					IssueBook issueBook = new IssueBook();
+					issueBook.setBookId(resultSet.getInt("bookId"));
+					issueBook.setUserId(resultSet.getInt("userId"));
+					issueBook.setIssueId(resultSet.getInt("issueId"));
+					issueBook.setIssueDate(resultSet.getDate("issueDate"));
+					issueBook.setReturnDate(resultSet.getDate("returnDate"));
+					beans.add(issueBook);
+				}
+				return beans;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }
